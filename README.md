@@ -2,7 +2,7 @@
 
 ## NOTE
 * This repo is intended to be used on Slackware-current (for now) so some adjustments need to be done to some of the s6-rc service definition source directories in order to make it work on Slackware 14.2.
-* Before using this repo, read the [s6](https://skarnet.org/software/s6/), [s6-rc](https://skarnet.org/software/s6-rc/), and [s6-linux-init](https://skarnet.org/software/s6-linux-init/) home page first to have a better understanding of what are they and what features or advantages that they provide compared to other init systems. Or for a quick introduction in video format, see [this video](https://www.youtube.com/watch?v=gZqIEstv5lM).
+* Before using this repo, read the [s6](https://skarnet.org/software/s6/), [s6-rc](https://skarnet.org/software/s6-rc/), and [s6-linux-init](https://skarnet.org/software/s6-linux-init/) home page first to have a better understanding of what they are and what features or advantages that they provide compared to other init systems. Or for a quick introduction in video format, see [this video](https://www.youtube.com/watch?v=gZqIEstv5lM).
 
 ## REQUIREMENTS
 1. skalibs
