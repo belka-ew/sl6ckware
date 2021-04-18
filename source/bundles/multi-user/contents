@@ -56,8 +56,7 @@ network
 #firewall
 
 # From rc.ip_forward
-#This is just a placeholder since it has not been
-#converted to s6-rc service definition style yet
+#ip_forward
 
 # From rc.krb5kdc
 #This is just a placeholder since it has not been

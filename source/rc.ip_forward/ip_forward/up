@@ -1,0 +1,67 @@
+#######################################################################
+# Start IP packet forwarding                                          #
+#                                                                     #
+# If you intend to run your Linux box as a router, i.e. as a computer #
+# that forwards and redistributes network packets, you will need to   #
+# enable IP packet forwarding in your kernel.                         #
+#                                                                     #
+# To activate IP packet forwarding at boot time, enable this service  #
+# by uncommenting "ip_forward" in bundles/multi-user/contents.        #
+#                                                                     #
+# To disable IP packet forwarding at boot time, disable this service  #
+# by commenting out "ip_forward" in bundles/multi-user/contents.      #
+#######################################################################
+
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/ip_forward: /" }
+fdmove -c 2 1
+foreground {
+  if { [ -f /proc/sys/net/ipv4/ip_forward ] }
+  echo "Activating IPv4 packet forwarding..."
+}
+unexport ?
+foreground {
+  if { [ -f /proc/sys/net/ipv6/conf/all/forwarding ] }
+  echo "Activating IPv6 packet forwarding..."
+}
+unexport ?
+# When using IPv4 packet forwarding, you will also get the rp_filter,
+# which automatically rejects incoming packets if the routing table
+# entry for their source address doesn't match the network interface
+# they're arriving on. This has security advantages because it prevents
+# the so-called IP spoofing, however it can pose problems if you use
+# asymmetric routing (packets from you to a host take a different path
+# than packets from that host to you) or if you operate a non-routing
+# host which has several IP addresses on different interfaces. To turn
+# rp_filter off, uncomment the lines below...
+#foreground {
+#  if { [ -r /proc/sys/net/ipv4/conf/all/rp_filter ] }
+#  echo "Disabling rp_filter..."
+#}
+#unexport ?
+pipeline {
+  foreground {
+    if { [ -f /proc/sys/net/ipv4/ip_forward ] }
+    echo "net.ipv4.ip_forward = 1"
+  }
+  unexport ?
+  # ...and the lines below.
+  #foreground {
+  #  if { [ -r /proc/sys/net/ipv4/conf/all/rp_filter ] }
+  #  echo "net.ipv4.conf.all.rp_filter = 0"
+  #}
+  #unexport ?
+  if { [ -f /proc/sys/net/ipv6/conf/all/forwarding ] }
+  echo "net.ipv6.conf.all.forwarding = 1"
+}
+# Changing /proc/sys/net/ipv4/ip_forward and
+# /proc/sys/net/ipv6/conf/all/forwarding result in resetting all
+# non-default ipv4 and ipv6 parameters (respectively) for the interface
+# as mentioned in /usr/src/linux/Documentation/networking/ip-sysctl.txt.
+# So, we will reapply any ipv4 and ipv6 sysctl parameters now.
+multisubstitute {
+  elglob -s0 file1 /etc/sysctl.d/*.conf
+  elglob -s0 file2 /run/sysctl.d/*.conf
+  elglob -s0 file3 /etc/sysctl.conf
+}
+sysctl -qr ipv[46] -p - $file1 $file2 $file3

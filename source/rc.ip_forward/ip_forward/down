@@ -1,0 +1,37 @@
+#############################
+# Stop IP packet forwarding #
+#############################
+
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/ip_forward: /" }
+fdmove -c 2 1
+foreground {
+  if { [ -f /proc/sys/net/ipv4/ip_forward ] }
+  echo "Disabling IPv4 packet forwarding..."
+}
+unexport ?
+foreground {
+  if { [ -f /proc/sys/net/ipv6/conf/all/forwarding ] }
+  echo "Disabling IPv6 packet forwarding..."
+}
+unexport ?
+pipeline {
+  foreground {
+    if { [ -f /proc/sys/net/ipv4/ip_forward ] }
+    echo "net.ipv4.ip_forward = 0"
+  }
+  unexport ?
+  if { [ -f /proc/sys/net/ipv6/conf/all/forwarding ] }
+  echo "net.ipv6.conf.all.forwarding = 0"
+}
+# Changing /proc/sys/net/ipv4/ip_forward and
+# /proc/sys/net/ipv6/conf/all/forwarding result in resetting all
+# non-default ipv4 and ipv6 parameters (respectively) for the interface
+# as mentioned in /usr/src/linux/Documentation/networking/ip-sysctl.txt.
+# So, we will reapply any ipv4 and ipv6 sysctl parameters now.
+multisubstitute {
+  elglob -s0 file1 /etc/sysctl.d/*.conf
+  elglob -s0 file2 /run/sysctl.d/*.conf
+  elglob -s0 file3 /etc/sysctl.conf
+}
+sysctl -qr ipv[46] -p - $file1 $file2 $file3
