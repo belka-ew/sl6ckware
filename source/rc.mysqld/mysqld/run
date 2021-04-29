@@ -24,15 +24,6 @@
 
 fdmove -c 2 1
 if { install -dm755 -o mysql -g mysql /var/run/mysql }
-foreground {
-  if {
-    pipeline { head -n1 env/CMD_OPTS }
-    grep -qe --plugin-load=ha_tokudb
-  }
-  cd /sys/kernel/mm/transparent_hugepage
-  heredoc 0 never redirfd -w 1 /dev/null tee enabled defrag
-}
-unexport ?
 s6-envdir env
 multisubstitute {
   importas -u CMD CMD
