@@ -13,3 +13,5 @@
 sysinit
 # For entering multi-user mode (see bundles/multi-user)
 multi-user
+# For sysvinit compatibility
+#sysvinit-rl2

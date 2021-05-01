@@ -1,0 +1,30 @@
+#########################################################################
+# This service provides basic compatibility with SystemV style startup  #
+# scripts for runlevel 4. There are some binary packages that install   #
+# SystemV init scripts. With this service in place, most well-written   #
+# startup scripts will work. This is primarily intended to support      #
+# commercial software, though, and probably shouldn't be considered bug #
+# free.                                                                 #
+#########################################################################
+
+backtick -D 1 -nE runlevel {
+  if { [ -r /run/runlevel ] } cat /run/runlevel
+}
+ifthenelse { [ $runlevel -gt 4 ] }
+{
+  elglob -s0 file /etc/rc.d/rc${runlevel}.d/K*
+  forx -Eo 0 script { $file } if -t { [ -x $script ] }
+  # Prepend every output with the service's name
+  pipeline -w { sed -u "s/^/sysvinit-rl${runlevel}: ${script}: /" }
+  fdmove -c 2 1 $script
+}
+{
+  elglob -s0 file /etc/rc.d/rc4.d/S*
+  forx -Eo 0 script { $file } if -t { [ -x $script ] }
+  # Prepend every output with the service's name
+  pipeline -w { sed -u "s/^/sysvinit-rl4: ${script}: /" }
+  fdmove -c 2 1 $script
+}
+importas -ui ? ?
+ifelse { [ $? -ne 0 ] } { exit $? }
+redirfd -w 1 /run/runlevel echo 4

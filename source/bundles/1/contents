@@ -10,3 +10,5 @@
 
 # For system initialization (see bundles/sysinit)
 sysinit
+# For sysvinit compatibility
+#sysvinit-rl1
