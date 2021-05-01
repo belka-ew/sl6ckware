@@ -50,4 +50,4 @@ if { rm -rf /run/${USERNAME}-subtree }
 if { install -dm700 -o $UID /run/${USERNAME}-subtree }
 if { cp -a $SCANDIR /run/${USERNAME}-subtree/service }
 emptyenv -c export PATH $DEF_PATH
-runuser -u $USERNAME -- $CMD $CMD_OPTS -- /run/${USERNAME}-subtree/service
+s6-setuidgid $USERNAME $CMD $CMD_OPTS -- /run/${USERNAME}-subtree/service
