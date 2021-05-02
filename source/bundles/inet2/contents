@@ -1,0 +1,42 @@
+# From rc.firewall
+#firewall
+
+# From rc.ip_forward
+#ip_forward
+
+# From rc.krb5kdc
+#krb5kdc
+
+# From rc.kadmind
+#This is just a placeholder since it has not been
+#converted to s6-rc service definition style yet
+
+# From rc.kpropd
+#This is just a placeholder since it has not been
+#converted to s6-rc service definition style yet
+
+# From rc.rpc
+#This is just a placeholder since it has not been
+#converted to s6-rc service definition style yet
+
+# From rc.inetd
+#This is just a placeholder since it has not been
+#converted to s6-rc service definition style yet
+
+# From rc.sshd
+#sshd
+
+# From rc.bind
+#bind
+
+# From rc.yp
+#This is just a placeholder since it has not been
+#converted to s6-rc service definition style yet
+
+# From rc.openvpn
+#This is just a placeholder since it has not been
+#converted to s6-rc service definition style yet
+
+# From rc.nfsd
+#This is just a placeholder since it has not been
+#converted to s6-rc service definition style yet
