@@ -59,8 +59,7 @@ network
 #ip_forward
 
 # From rc.krb5kdc
-#This is just a placeholder since it has not been
-#converted to s6-rc service definition style yet
+#krb5kdc
 
 # From rc.kadmind
 #This is just a placeholder since it has not been

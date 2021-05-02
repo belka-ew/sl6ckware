@@ -1,0 +1,16 @@
+#!/bin/execlineb -P
+
+#########################################################################
+# Start krb5kdc, which is the Kerberos version 5 Authentication Service #
+# and Key Distribution Center (AS/KDC). This needs to run first on both #
+# master and secondary KDCs.                                            #
+#########################################################################
+
+fdmove -c 2 1
+emptyenv -p
+s6-envdir env
+multisubstitute {
+  importas -u CMD CMD
+  importas -usCd" " CMD_OPTS CMD_OPTS
+}
+emptyenv -c unexport PATH $CMD $CMD_OPTS
