@@ -1,10 +1,8 @@
 #!/bin/execlineb -P
 
-#########################################################################
-# Start krb5kdc, which is the Kerberos version 5 Authentication Service #
-# and Key Distribution Center (AS/KDC). This needs to run first on both #
-# master and secondary KDCs.                                            #
-#########################################################################
+###################################
+# Start krb5kdc (Kerberos V5 KDC) #
+###################################
 
 fdmove -c 2 1
 emptyenv -p
