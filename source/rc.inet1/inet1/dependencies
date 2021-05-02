@@ -1,2 +1,2 @@
-sysinit
 syslog
+udev-add
