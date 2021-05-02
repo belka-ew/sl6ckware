@@ -71,7 +71,7 @@ All of them are available on [SBo](https://slackbuilds.org/).
 ## QUICK USER GUIDE
 * Start a service: `s6-rc change service_name`
 * Stop a service: `s6-rc -d change service_name`
-* Restart a longrun service: `s6-svc -wr /run/service/service_name`
+* Restart a longrun service: `s6-svc -r /run/service/service_name`
 * List all active services: `s6-rc -a list`
 * List all nonactive services: `s6-rc -da list`
 * Switch to another compiled service database: `s6-rc-update another_compiled_database_absolute_path`
