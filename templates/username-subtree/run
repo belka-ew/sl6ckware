@@ -9,7 +9,7 @@ emptyenv -p
 getpid PID
 s6-envdir env
 multisubstitute {
-  importas -u USERNAME USERNAME
+  importas USER USER
   importas -u XDG_CACHE_HOME XDG_CACHE_HOME
   importas -u XDG_CONFIG_HOME XDG_CONFIG_HOME
   importas -u XDG_DATA_HOME XDG_DATA_HOME
@@ -22,32 +22,39 @@ multisubstitute {
   importas -usCd" " CMD_OPTS CMD_OPTS
 }
 backtick -n SESSION {
-  loginctl --no-legend --value -p Sessions show-user $USERNAME
+  loginctl --no-legend --value -p Sessions show-user $USER
 }
-backtick -n HOME { homeof $USERNAME }
-s6-envuidgid -u $USERNAME
+backtick -n HOME { homeof $USER }
+s6-envuidgid $USER
 multisubstitute {
   importas -u SESSION SESSION
-  importas -u HOME HOME
-  importas -u UID UID
+  importas HOME HOME
+  importas UID UID
+  importas GID GID
 }
 export XDG_CACHE_HOME $XDG_CACHE_HOME
 export XDG_CONFIG_HOME $XDG_CONFIG_HOME
 export XDG_DATA_HOME $XDG_DATA_HOME
 export XDG_RUNTIME_DIR $XDG_RUNTIME_DIR
+if { s6-svperms -g :$GID -E :$GID . }
 if {
   redirfd -w 1 /sys/fs/cgroup/elogind/${SESSION}/cgroup.procs
   echo $PID
 }
 background -d {
-  if { [ $DBDIR != NONE ] }
+  if { [ $DBDIR != NONE ] } s6-applyuidgid -zU
   if { s6-svwait -U . }
-  s6-setuidgid $USERNAME
-  s6-rc-init -dc $DBDIR -l /run/${USERNAME}-subtree/rc /run/${USERNAME}-subtree/service
+  if { s6-rc-init -dc $DBDIR -l /run/${USER}-subtree/rc /run/${USER}-subtree/service }
+  backtick -nE SESSION_TYPE { loginctl --no-legend --value -p Type show-session $SESSION }
+  ifelse { [ $SESSION_TYPE != tty ] }
+  {
+    exec -c s6-rc -l /run/${USER}-subtree/rc -upv2 change graphical-login
+  }
+  exec -c s6-rc -l /run/${USER}-subtree/rc -upv2 change console-login
 }
 unexport !
-if { rm -rf /run/${USERNAME}-subtree }
-if { install -dm700 -o $UID /run/${USERNAME}-subtree }
-if { cp -a $SCANDIR /run/${USERNAME}-subtree/service }
+if { rm -rf /run/${USER}-subtree }
+if { install -dm700 -o $USER /run/${USER}-subtree }
+if { cp -a $SCANDIR /run/${USER}-subtree/service }
 emptyenv -c export PATH $DEF_PATH
-s6-setuidgid $USERNAME $CMD $CMD_OPTS -- /run/${USERNAME}-subtree/service
+s6-applyuidgid -U $CMD $CMD_OPTS -- /run/${USER}-subtree/service

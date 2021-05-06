@@ -1,8 +1,8 @@
 #!/bin/execlineb -P
 
-#############################################################
-# Start a catch-all logger for username supervision subtree #
-#############################################################
+###############################################################
+# Start a catch-all logger for username's supervision subtree #
+###############################################################
 
 s6-envdir env
 multisubstitute {
@@ -19,8 +19,6 @@ multisubstitute {
   importas -u UID UID
   importas -u GID GID
 }
-backtick -n HOME { homeof $LOGDIR_OWNER }
-importas -u HOME HOME
 if { install -dm $LOGDIR_PERMS -o $UID -g $GID $LOGDIR_PATH }
 s6-setuidgid ${UID}:${GID}
 exec -c $CMD $CMD_OPTS -- $LOG_SCRIPT

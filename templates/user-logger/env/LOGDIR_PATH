@@ -1,2 +1,2 @@
-${HOME}/.local/share/s6/log/svname
+${XDG_DATA_HOME}/s6/svname
 # Logging directory path
