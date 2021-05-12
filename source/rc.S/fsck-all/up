@@ -9,4 +9,6 @@ ifelse { [ -r /etc/fastboot ] }
 { echo Fastboot is requested. Skipping non-root filesystems checking... }
 if { echo Checking non-root filesystems... }
 ifelse { [ -r /etc/forcefsck ] } { fsck -fCRAa }
-fsck -CRAa
+foreground { fsck -CRAa }
+importas -u ? ?
+ifelse { [ $? -lt 2 ] } { exit 0 } exit $?
