@@ -1,0 +1,17 @@
+#!/bin/execlineb -P
+
+##################################################
+# Start cgrulesengd (control group rules daemon) #
+##################################################
+
+fdmove -c 2 1
+s6-envdir env
+multisubstitute {
+  importas -u CMD CMD
+  importas -usCd" " CMD_OPTS CMD_OPTS
+}
+multisubstitute {
+  importas -u SOCKET_USER SOCKET_USER
+  importas -u SOCKET_GROUP SOCKET_GROUP
+}
+exec -c $CMD $CMD_OPTS

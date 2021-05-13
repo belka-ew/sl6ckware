@@ -1,0 +1,6 @@
+#######################################################################
+# Unload a subsystem of cgroup filesystem based on /etc/cgconfig.conf #
+# configuration file                                                  #
+#######################################################################
+
+cgclear -l /etc/cgconfig.conf -L /etc/cgconfig.d

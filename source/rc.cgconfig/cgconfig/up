@@ -1,0 +1,31 @@
+###############################################################
+# Setup control group file system based on /etc/cgconfig.conf #
+# configuration file using cgconfigparser                     #
+###############################################################
+
+if { cgconfigparser -l /etc/cgconfig.conf -L /etc/cgconfig.d }
+backtick -nED "" rule { grep -m1 ^\\*[[:space:]]\\+ /etc/cgrules.conf }
+multidefine -Cd" \t" $rule { "" controllers defaultcgroup }
+if -t { [ -n $defaultcgroup ] }
+# Create the default group
+if { cgcreate -f 664 -d 775 -g $controllers:$defaultcgroup }
+# Special rule for cpusets
+foreground {
+  if { pipeline { echo $controllers } grep -wq cpuset }
+  backtick -n CPUS { cgget -nv -r cpuset.cpus / }
+  backtick -n MEMS { cgget -nv -r cpuset.mems / }
+  multisubstitute {
+    importas -ui CPUS CPUS
+    importas -ui MEMS MEMS
+  }
+  cgset -r cpuset.cpus=$CPUS -r cpuset.mems=$MEMS $defaultcgroup
+}
+unexport ?
+# Classify everything to default cgroup. Ignore errors, some processes
+# may exit after ps is run and before cgclassify moves them.
+pipeline { ps --no-headers -eL o tid } pipeline { tr -d " " }
+withstdinas -N TID importas -usd"\n" TID TID
+if -t {
+  redirfd -w 2 /dev/null
+  cgclassify -g ${controllers}:${defaultcgroup} $TID
+}

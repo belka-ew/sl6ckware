@@ -1,0 +1,4 @@
+root
+# Set owner of cgred socket. 'cgexec' tool should have write access
+# there (either using suid and/or sgid permissions or Linux
+# capabilities).

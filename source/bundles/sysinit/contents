@@ -37,6 +37,12 @@ update-motd
 random-seed
 hostname
 
+# Start libcgroup services
+# From rc.cgconfig
+#cgconfig
+# From rc.cgred
+#cgred
+
 # From rc.loop
 #module-loop
 
