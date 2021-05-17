@@ -1,0 +1,7 @@
+bind-run
+cgroupfs
+remount-root
+# Uncomment below if you configure dockerd to listen from a tcp socket
+#network
+# Uncomment below if you have an rc.firewall script
+#firewall

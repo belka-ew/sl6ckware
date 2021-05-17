@@ -1,0 +1,13 @@
+#!/bin/execlineb -P
+
+############################################################
+# Start dockerd (A self-sufficient runtime for containers) #
+############################################################
+
+fdmove -c 2 1
+s6-envdir env
+multisubstitute {
+  importas -u CMD CMD
+  importas -usCd" " CMD_OPTS CMD_OPTS
+}
+unshare -m -- emptyenv -c $CMD $CMD_OPTS
