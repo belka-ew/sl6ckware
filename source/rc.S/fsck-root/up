@@ -66,6 +66,6 @@ Once you exit the single-user shell, the system will reboot.
 }
 unexport ?
 if { echo Unmounting filesystems... }
-foreground { s6-linux-init-umountall } unexport ?
+foreground { umount -ar } unexport ?
 if { echo Rebooting system... }
-s6-linux-init-hpr -fr
+reboot -f
