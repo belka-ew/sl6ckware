@@ -1,0 +1,36 @@
+###############################
+# Bring down PCMCIA subsystem #
+###############################
+
+# Set this to the driver to use, one of:
+# probe, yenta_socket, i82365, i82092, pd6729, tcic, etc.
+# Do the same for this service's up script
+define driver "probe"
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/pcmcia: /" }
+fdmove -c 2 1
+if { echo "Shutting down PCMCIA services..." }
+if { pccardctl eject }
+if {
+  if -t { grep -wq ^pcmcia /proc/modules }
+  backtick MODULES { awk "/^pcmcia / { print $4 }" /proc/modules }
+  importas -usd"," MODULES MODULES
+  if { echo "Unloading kernel module:" $MODULES }
+  modprobe -r $MODULES
+}
+if { echo "Unloading kernel module: pcmcia" }
+if { modprobe -r pcmcia }
+ifthenelse { [ $driver != probe ] }
+{
+  if { echo "Unloading PCIC: $driver" }
+  modprobe -r $driver
+}
+{
+  forx -Ex0 drv { yenta_socket i82365 tcic }
+  if { grep -wq $drv /proc/modules }
+  if { echo "Unloading PCIC: $drv" }
+  modprobe -r $drv
+}
+unexport ?
+if { echo "Unloading kernel module: rsrc_nonstatic pcmcia_core" }
+modprobe -r rsrc_nonstatic pcmcia_core

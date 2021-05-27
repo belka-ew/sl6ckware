@@ -1,0 +1,24 @@
+###############################
+# Initialize PCMCIA subsystem #
+###############################
+
+# Set this to the driver to use, one of:
+# probe, yenta_socket, i82365, i82092, pd6729, tcic, etc.
+# Do the same for this service's down script
+define driver "probe"
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/pcmcia: /" }
+fdmove -c 2 1
+if { echo "Starting PCMCIA services..." }
+ifelse { grep -Fq pcmcia /proc/devices } { echo "PCIC already loaded" }
+if { modprobe pcmcia }
+ifelse { [ $driver != probe ] }
+{
+  if { echo "Loading PCIC: $driver" }
+  modprobe $driver
+}
+if { echo "Probing for PCIC: edit rc.pcmcia/pcmcia/{up,down}" }
+forx -Ex0 drv { yenta_socket i82365 tcic }
+if { modprobe $drv }
+if -nt { pipeline { pccardctl status } grep -q Socket }
+if { modprobe -r $drv } exit 1

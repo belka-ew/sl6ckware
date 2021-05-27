@@ -37,6 +37,9 @@ update-motd
 random-seed
 hostname
 
+# From rc.pcmcia
+#pcmcia
+
 # Start libcgroup services
 # From rc.cgconfig
 #cgconfig

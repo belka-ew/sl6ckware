@@ -1,5 +1,7 @@
 udev-add
-# Uncomment "lvm" or/and "luks" if you use LVM
-# or/and LUKS
+# Uncomment "lvm" or/and "luks" if you use LVM or/and LUKS
 #lvm
 #luks
+# Uncomment below if you want to fsck your PCMCIA devices along with the
+# other drives
+#pcmcia
