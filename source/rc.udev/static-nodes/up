@@ -3,7 +3,7 @@
 ###############################
 
 # /dev/stdout may not exist at this point
-pipeline { kmod static-nodes -f tmpfiles --output /proc/self/fd/1 }
+pipeline { kmod static-nodes -f tmpfiles -o /proc/self/fd/1 }
 pipeline { sort -r }
 pipeline { uniq }
 pipeline { sed "s/!//" }
