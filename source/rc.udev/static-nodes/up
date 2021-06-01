@@ -6,12 +6,12 @@
 pipeline { kmod static-nodes -f tmpfiles -o /proc/self/fd/1 }
 pipeline { sort -r }
 pipeline { uniq }
-pipeline { sed "s/!//" }
-forstdin -d"\n" LINE
-importas -u line LINE
-multidefine -d": " $line { 1 2 3 4 5 6 7 8 }
-ifelse { [ $1 = d ] }
+pipeline { sed s/!// }
+forstdin -E line
+multidefine -d": " $line { type name mode "" "" "" major minor }
+ifelse { [ $type = d ] }
 {
-  mkdir -p -m $3 $2
+  mkdir -p -m $mode $name
 }
-mknod -m $3 $2 $1 $7 $8
+if { [ ! -c $name ] }
+mknod -m $mode $name $type $major $minor
