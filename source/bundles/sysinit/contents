@@ -33,6 +33,7 @@ cleanup-var
 ICE-socketdir
 X11-socketdir
 utmp
+faillock
 update-motd
 random-seed
 hostname

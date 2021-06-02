@@ -1,0 +1,5 @@
+##########################################
+# Create pam_faillock(8) tally directory #
+##########################################
+
+mkdir /var/run/faillock
