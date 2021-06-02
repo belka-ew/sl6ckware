@@ -2,14 +2,16 @@
 # Run depmod to generate modules.dep and map files #
 ####################################################
 
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/depmod: /" }
+fdmove -c 2 1
 # Determine the version of the running kernel
-backtick -n RELEASE { uname -r }
-importas -u RELEASE RELEASE
+backtick -E release { uname -r }
 # Update kernel module dependencies
-ifelse { [ -e /lib/modules/${RELEASE}/modules.dep ] }
+ifelse { [ -e /lib/modules/${release}/modules.dep ] }
 {
-  if { echo depmod: Updating module dependency list for ${RELEASE}: depmod --quick }
+  if { echo "Updating module dependency list for ${release}: depmod --quick" }
   depmod --quick
 }
-if { echo depmod: Creating module dependency list for ${RELEASE}: depmod --all }
+if { echo "Creating module dependency list for ${release}: depmod --all" }
 depmod --all
