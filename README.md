@@ -78,7 +78,6 @@ All of them are available on [SBo](https://slackbuilds.org/).
 
 ## SERVICES NOT YET CONVERTED
 Below rc scripts are not yet converted to s6-rc service definition:
-- rc.serial
 - rc.M (genpowerd, accton, quota)
 - rc.inet2
     - rc.rpc

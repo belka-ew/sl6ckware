@@ -1,0 +1,22 @@
+######################################################################
+# Save the state of serial devices if the automatic saving of serial #
+# flags is enabled                                                   #
+######################################################################
+
+backtick -E firstline { head -n1 /etc/serial.conf }
+if -t { [ $firstline = "###AUTOSAVE###" ] }
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/serial: /" }
+fdmove -c 2 1
+if { echo "Saving the state of serial devices..." }
+if {
+  redirfd -w 1 /etc/.serial.conf.new
+  grep ^[[:blank:]]*# /etc/serial.conf
+}
+if {
+  redirfd -a 1 /etc/.serial.conf.new
+  elglob -s alldevs /dev/ttyS*
+  setserial -gG $alldevs
+}
+if { mv /etc/serial.conf /etc/.serial.conf.old }
+mv /etc/.serial.conf.new /etc/serial.conf
