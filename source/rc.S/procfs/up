@@ -1,10 +1,11 @@
-#########################
-# Mount procfs on /proc #
-#########################
+######################################
+# Mount the proc filesystem on /proc #
+######################################
 
-# Check if /proc is already mounted
-if -nt { mountpoint -q /proc }
+# Check if the proc filesystem is already mounted on /proc
+backtick -E fstype { stat -fc%T /proc }
+if -t { [ $fstype != proc ] }
 # Prepend every output with the service's name
-pipeline -w { sed -u "s/^/tmpfs-run: /" }
+pipeline -w { sed -u "s/^/procfs: /" }
 fdmove -c 2 1
 mount -vnt proc proc /proc

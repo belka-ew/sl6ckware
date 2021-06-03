@@ -1,9 +1,10 @@
-#######################
-# Mount sysfs on /sys #
-#######################
+######################################
+# Mount the sysfs filesystem on /sys #
+######################################
 
-# Check if sysfs is already mounted
-if -nt { mountpoint -q /sys }
+# Check if the sysfs filesystem is already mounted on /sys
+backtick -E fstype { stat -fc%T /sys }
+if -t { [ $fstype != sysfs ] }
 # Prepend every output with the service's name
 pipeline -w { sed -u "s/^/sysfs: /" }
 fdmove -c 2 1

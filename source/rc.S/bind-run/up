@@ -2,7 +2,8 @@
 # Bind mount /run to /var/run #
 ###############################
 
-if -tn { mountpoint -q /var/run }
+backtick -E fstype { stat -fc%T /var/run }
+if -t { [ $fstype != tmpfs ] }
 # Prepend every output with the service's name
 pipeline -w { sed -u "s/^/bind-run: /" }
 fdmove -c 2 1
