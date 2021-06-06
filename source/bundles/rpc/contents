@@ -1,0 +1,5 @@
+rpcbind
+statd
+# Uncomment below to use static ports for lockd (edit rc.rpc/lockd-ports/up to
+# configure the static ports that will be used)
+#lockd-ports

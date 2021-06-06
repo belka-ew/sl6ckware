@@ -1,0 +1,7 @@
+########################################################
+# Set static ports for lockd (NFS Lock Manager Daemon) #
+########################################################
+
+# TCP and UDP ports rpc.lockd should listen on
+multidefine -d" " "32768 32768" { tcp_port udp_port }
+sysctl -qw fs.nfs.nlm_tcpport=$tcp_port fs.nfs.nlm_udpport=$udp_port
