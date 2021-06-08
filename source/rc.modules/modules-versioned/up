@@ -1,14 +1,10 @@
-##############################################################################
-# Run any rc.modules-$(uname -r) file that exists (this is used if you have  #
-# specific modules which should only be loaded for specific kernel versions) #
-##############################################################################
+#####################################################################
+# Run rc.modules-$(uname -r) (this is used if you have specific     #
+# modules which should only be loaded for specific kernel versions) #
+#####################################################################
 
-# Determine the version of the running kernel:
-backtick -n RELEASE { uname -r }
-importas -u RELEASE RELEASE
-ifelse { [ ! -x /etc/rc.d/rc.modules-$RELEASE ] }
-{
-  if { echo modules-versioned: No /etc/rc.d/rc.modules-$RELEASE found or it's not executable! Aborting... }
-  exit 1
-}
-/etc/rc.d/rc.modules-$RELEASE
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/modules-versioned: /" }
+fdmove -c 2 1
+backtick -E release { uname -r }
+/etc/rc.d/rc.modules-$release
