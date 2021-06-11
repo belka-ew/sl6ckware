@@ -1,0 +1,11 @@
+##############################################
+# Mount the nfsd filesystem on /proc/fs/nfsd #
+##############################################
+
+# Check if the nfsd filesystem is already mounted on /proc/fs/nfsd
+backtick -E fstype { stat -fc%T /proc/fs/nfsd }
+if -t { [ $fstype != nfsd ] }
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/nfsdfs: /" }
+fdmove -c 2 1
+mount -vt nfsd nfsd /proc/fs/nfsd

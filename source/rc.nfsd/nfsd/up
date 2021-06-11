@@ -1,0 +1,8 @@
+#################################
+# Start the kernel's NFS server #
+#################################
+
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/nfsd: /" }
+fdmove -c 2 1
+rpc.nfsd

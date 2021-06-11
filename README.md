@@ -82,7 +82,6 @@ Below rc scripts are not yet converted to s6-rc service definition:
 - rc.inet2
     - rc.yp
     - rc.openvpn
-    - rc.nfsd
 - rc.autofs
 - rc.alsa
 - rc.6 (genpowerd, pppd, accton, quota)

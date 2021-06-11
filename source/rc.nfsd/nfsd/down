@@ -1,0 +1,10 @@
+################################
+# Stop the kernel's NFS server #
+################################
+
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/nfsd: /" }
+fdmove -c 2 1
+# Setting the number of threads to 0 will stop all threads and thus
+# close any open connections, effectively stopping the NFS server.
+rpc.nfsd 0

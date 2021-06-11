@@ -1,0 +1,9 @@
+###################################################################
+# Synchronize /var/lib/nfs/etab with /etc/exports and files under #
+# /etc/exports.d                                                  #
+###################################################################
+
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/nfs-exports: /" }
+fdmove -c 2 1
+exportfs -r
