@@ -1,0 +1,6 @@
+-d -broadcast
+# Note that if you use the -broadcast option here, ypbind will ignore
+# your settings in /etc/yp.conf. Instead, it will send a broadcast
+# across the network to request the information needed to bind to a
+# specific NIS server. Therefore, you should delete that option here if
+# you have /etc/yp.conf configured.

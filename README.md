@@ -80,7 +80,6 @@ All of them are available on [SBo](https://slackbuilds.org/).
 Below rc scripts are not yet converted to s6-rc service definition:
 - rc.M (genpowerd, accton, quota)
 - rc.inet2
-    - rc.yp
     - rc.openvpn
 - rc.autofs
 - rc.alsa

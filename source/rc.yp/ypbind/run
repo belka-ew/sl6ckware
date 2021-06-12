@@ -1,0 +1,19 @@
+#!/bin/execlineb -P
+
+######################################
+# Start ypbind (NIS binding process) #
+######################################
+
+fdmove -c 2 1
+# First, we must setup the NIS domainname. NOTE: this is not necessarily
+# the same as your DNS domainname, set in /etc/resolv.conf. The NIS
+# domainname is the name of a domain served by your NIS server.
+# If /etc/defaultdomain has not been configured we'll bail out.
+if { nisdomainname -F /etc/defaultdomain }
+s6-envdir env
+multisubstitute {
+  importas -u CMD CMD
+  importas -usCd" " CMD_OPTS CMD_OPTS
+}
+s6-notifyoncheck -dn0 -c "pipeline { rpcinfo -s } grep -wq ypbind"
+exec -c $CMD $CMD_OPTS

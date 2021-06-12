@@ -1,0 +1,26 @@
+# Start NIS (Network Information Service). NIS provides network-wide
+# distribution of hostname, username, and other information databases.
+# After configuring NIS, you will need to uncomment the parts of this
+# bundle that you want to run.
+#
+# NOTE: for detailed information about setting up NIS, see the
+# documentation in /usr/doc/yp-tools, /usr/doc/ypbind, /usr/doc/ypserv,
+# and /usr/doc/Linux-HOWTOs/NIS-HOWTO.
+
+# NIS SERVER CONFIGURATION
+# If you are the master server for the NIS domain, you must run ypserv
+# to service clients on the domain.
+#ypserv
+# If you are the master server for the NIS domain, you must also run
+# rpc.yppasswdd, which is the RPC server that lets users change their
+# passwords.
+#yppasswdd
+# If you have NIS slave servers, you might also want to start up
+# rpc.ypxfrd, which transfers changes in the NIS domain to slave
+# servers. Alternatively, rpc.ypxfrd can be run out of inetd.
+#ypxfrd
+
+# NIS CLIENT CONFIGURATION
+# If you are an NIS client, all you need to do is run ypbind.
+# Your NIS server might also be a client.
+ypbind
