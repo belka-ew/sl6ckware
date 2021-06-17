@@ -1,0 +1,5 @@
+network
+# Comment out "remount-root" and uncomment "local-fs"
+# if you use a separate partition or a tmpfs for /tmp
+remount-root
+#local-fs

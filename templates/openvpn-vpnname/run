@@ -1,0 +1,15 @@
+#!/bin/execlineb -P
+
+##########################################################
+# Start an instance of openvpn (secure IP tunnel daemon) #
+# for vpnname                                            #
+##########################################################
+
+fdmove -c 2 1
+s6-envdir env
+multisubstitute {
+  importas -u CONF_PATH CONF_PATH
+  importas -u CMD CMD
+  importas -usCd" " CMD_OPTS CMD_OPTS
+}
+exec -c $CMD $CMD_OPTS --config $CONF_PATH
