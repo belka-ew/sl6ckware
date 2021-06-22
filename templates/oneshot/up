@@ -1,0 +1,7 @@
+#######################
+# Service description #
+#######################
+
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/svname: /" }
+fdmove -c 2 1
