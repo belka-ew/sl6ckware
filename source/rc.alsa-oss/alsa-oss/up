@@ -1,0 +1,10 @@
+################################################################
+# Load the ALSA OSS kernel modules to support OSS applications #
+################################################################
+
+# Prepend every output with the service's name
+pipeline -w { sed -u "s/^/alsa-oss: /" }
+fdmove -c 2 1
+if { echo "Loading OSS compatibility modules for ALSA..." }
+# Use -b to enable blacklisting these modules
+modprobe -ab snd-pcm-oss snd-seq-oss snd-mixer-oss

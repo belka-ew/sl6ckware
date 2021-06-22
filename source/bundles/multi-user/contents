@@ -94,8 +94,7 @@ atd
 #postfix
 
 # From rc.alsa
-#This is just a placeholder since it has not been
-#converted to s6-rc service definition style yet
+#alsa
 
 # From rc.mysqld
 #mysqld
