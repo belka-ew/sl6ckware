@@ -1,0 +1,6 @@
+#!/bin/execlineb -P
+
+fdmove -c 2 1
+# We have to manually kill genpowerd since the SIGTERM is not sent to
+# genpowerd
+killall genpowerd

@@ -1,0 +1,15 @@
+#!/bin/execlineb -P
+
+########################################
+# Start genpowerd (UPS monitor daemon) #
+########################################
+
+fdmove -c 2 1
+s6-envdir env
+multisubstitute {
+  importas -u CMD CMD
+  importas -usCd" " CMD_OPTS CMD_OPTS
+}
+# Using s6-fghack here since genpowerd doesn't have a command line
+# option that will make it run in the foreground
+s6-fghack exec -c $CMD $CMD_OPTS
