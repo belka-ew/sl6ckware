@@ -10,4 +10,4 @@ fdmove -c 2 1
 # this service
 envfile /etc/default/keymap
 importas -u KEYMAP KEYMAP
-loadkeys -v $KEYMAP
+loadkeys $KEYMAP
