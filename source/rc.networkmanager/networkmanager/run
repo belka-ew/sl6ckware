@@ -10,14 +10,6 @@ multisubstitute {
   importas -u CMD CMD
   importas -usCd" " CMD_OPTS CMD_OPTS
 }
-# Use org.freedesktop.NetworkManager dbus address availability as readiness indicator
-s6-notifyoncheck -dn0 -c
-"pipeline {
-  dbus-send
-    --system
-    --type=method_call
-    --print-reply=literal
-    --dest=org.freedesktop.DBus
-    /org/freedesktop/DBus org.freedesktop.DBus.NameHasOwner string:org.freedesktop.NetworkManager
-} grep -wq true"
+# Wait for NetworkManager startup to complete using nm-online
+s6-notifyoncheck -dn0 -c "nm-online -sq"
 exec -c $CMD $CMD_OPTS
